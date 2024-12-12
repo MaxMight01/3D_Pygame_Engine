@@ -7,7 +7,7 @@ class Camera:
         self.v_unit = v_unit
         self.w_unit = w_unit
         
-    def set_down_vector(self, down_vector = np.array([[0],[1],[0]])): #direction of 'down' for the camera actions
+    def set_down_vector(self, down_vector = np.array([[0],[-1],[0]])): #direction of 'down' for the camera actions
         self.down_vector = down_vector
 
     def update_position_movement(self, movement = np.array([[0],[0],[0]])):
@@ -29,7 +29,7 @@ class Camera:
         self.v_unit = np.array([round(v, 2) for v in v_rot]).reshape(-1,1)
         self.w_unit = np.array([round(w, 2) for w in w_rot]).reshape(-1,1)
 
-    def update_orient_lat(self, theta = 0): #expects theta in radians, +ve for mouse right and -ve for mouse down
+    def update_orient_lat(self, theta = 0): #expects theta in radians, +ve for mouse right and -ve for mouse left
         u_flat = self.u_unit.reshape(-1)
         v_flat = self.v_unit.reshape(-1)
         w_flat = self.w_unit.reshape(-1)
