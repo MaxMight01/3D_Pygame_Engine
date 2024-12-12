@@ -2,6 +2,7 @@ import pygame
 import os
 import json
 import utils
+import numpy as np
 
 pygame.init()
 
