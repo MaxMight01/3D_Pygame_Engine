@@ -21,3 +21,25 @@ screen_width = screen_scale*ratio_w
 screen_height = screen_scale*ratio_h
 screen_width, screen_height = int(0.9*screen_width), int(0.9*screen_height)
 screen = pygame.display.set_mode([screen_width, screen_height])
+
+#Caption.
+pygame.display.set_caption(params["caption"])
+
+#Colors.
+c_BACKGROUND = params["colors"]["background"]
+
+#fps and timer.
+fps = params["fps"]
+timer = pygame.time.Clock()
+
+running = True
+while running:
+    timer.tick(fps)
+    screen.fill(c_BACKGROUND)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    pygame.display.flip()
+pygame.quit()
