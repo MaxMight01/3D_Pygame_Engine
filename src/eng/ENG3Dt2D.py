@@ -6,6 +6,7 @@ class Camera:
         self.u_unit = u_unit
         self.v_unit = v_unit
         self.w_unit = w_unit
+        self.down_vector = None
         
     def set_down_vector(self, down_vector = np.array([[0],[-1],[0]])): #direction of 'down' for the camera actions
         self.down_vector = down_vector
