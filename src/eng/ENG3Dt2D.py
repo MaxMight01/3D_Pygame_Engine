@@ -2,20 +2,20 @@ import numpy as np
 
 class Camera:
     def __init__(self, origin = np.array([[0],[0],[0]]), u_unit = np.array([[1],[0],[0]]), v_unit = np.array([[0],[1],[0]]), w_unit = np.array([[0],[0],[1]])):
-        self.origin = origin
-        self.u_unit = u_unit
-        self.v_unit = v_unit
-        self.w_unit = w_unit
+        self.origin = origin.astype('float64')
+        self.u_unit = u_unit.astype('float64')
+        self.v_unit = v_unit.astype('float64')
+        self.w_unit = w_unit.astype('float64')
         self.down_vector = None
         
     def set_down_vector(self, down_vector = np.array([[0],[-1],[0]])): #direction of 'down' for the camera actions
-        self.down_vector = down_vector
+        self.down_vector = down_vector.astype('float64')
 
     def update_position_movement(self, movement = np.array([[0],[0],[0]])):
-        self.origin += movement
+        self.origin += movement.astype('float64')
 
     def update_position_reset(self, reset = np.array([[0],[0],[0]])):
-        self.origin = reset
+        self.origin = reset.astype('float64')
 
     def vector_rotate(v, k, theta): #v is vector to be rotated, k is axis unit vector, theta is angle to be rotated by
         v_rot = v*np.cos(theta) + np.cross(k,v)*np.sin(theta) + k*(np.dot(k,v)*(1-np.cos(theta)))
@@ -27,8 +27,8 @@ class Camera:
         w_flat = self.w_unit.reshape(-1)
         v_rot = self.vector_rotate(v_flat, u_flat, theta)
         w_rot = self.vector_rotate(w_flat, u_flat, theta)
-        self.v_unit = np.array([round(v, 2) for v in v_rot]).reshape(-1,1)
-        self.w_unit = np.array([round(w, 2) for w in w_rot]).reshape(-1,1)
+        self.v_unit = np.array([round(v, 2) for v in v_rot]).reshape(-1,1).astype('float64')
+        self.w_unit = np.array([round(w, 2) for w in w_rot]).reshape(-1,1).astype('float64')
 
     def update_orient_lat(self, theta = 0): #expects theta in radians, +ve for mouse right and -ve for mouse left
         u_flat = self.u_unit.reshape(-1)
@@ -38,14 +38,14 @@ class Camera:
         u_rot = self.vector_rotate(u_flat, d_flat, theta)
         v_rot = self.vector_rotate(v_flat, d_flat, theta)
         w_rot = self.vector_rotate(w_flat, d_flat, theta)
-        self.u_unit = np.array([round(u, 2) for u in u_rot]).reshape(-1,1)
-        self.v_unit = np.array([round(v, 2) for v in v_rot]).reshape(-1,1)
-        self.w_unit = np.array([round(w, 2) for w in w_rot]).reshape(-1,1)
+        self.u_unit = np.array([round(u, 2) for u in u_rot]).reshape(-1,1).astpye('float64')
+        self.v_unit = np.array([round(v, 2) for v in v_rot]).reshape(-1,1).astype('float64')
+        self.w_unit = np.array([round(w, 2) for w in w_rot]).reshape(-1,1).astype('float64')
 
     def update_orient_reset(self):
-        self.u_unit = np.array([[1],[0],[0]])
-        self.v_unit = np.array([[0],[1],[0]])
-        self.w_unit = np.array([[0],[0],[1]])
+        self.u_unit = np.array([[1],[0],[0]]).astype('float64')
+        self.v_unit = np.array([[0],[1],[0]]).astype('float64')
+        self.w_unit = np.array([[0],[0],[1]]).astype('float64')
 
 
 class ViewVolume:
@@ -101,11 +101,11 @@ class ViewVolume:
         self.M_translation = np.array([[1,0,0,-cam_pos[0][0]],
                                        [0,1,0,-cam_pos[1][0]],
                                        [0,0,1,-cam_pos[2][0]],
-                                       [0,0,0,1]])
+                                       [0,0,0,1]]).astype('float64')
         self.M_rotation = np.array([[u_unit[0][0], u_unit[1][0], u_unit[2][0], 0],
                                     [v_unit[0][0], v_unit[1][0], v_unit[2][0], 0],
                                     [w_unit[0][0], w_unit[1][0], w_unit[2][0], 0],
-                                    [0,0,0,1]])
+                                    [0,0,0,1]]).astype('float64')
 
     def update_perspective(self):
         if self.left is None or self.right is None or self.top is None or self.bottom is None or self.near is None or self.far is None:
@@ -119,7 +119,7 @@ class ViewVolume:
         self.M_projection = np.array([[2*n/(r-l), 0, (r+l)/(r-l), 0],
                                       [0, 2*n/(t-b), (t+b)/(t-b), 0],
                                       [0, 0, -(f+n)/(f-n), -2*f*n/(f-n)],
-                                      [0, 0, -1, 0]])
+                                      [0, 0, -1, 0]]).astype('float64')
 
     def get_screen_size(self, width, height):
         self.width = width
@@ -132,7 +132,7 @@ class ViewVolume:
         ny = self.height
         self.M_viewport = np.array([[nx/2, 0, 0, (nx-1)/2],
                                     [0, ny/2, 0, (ny-1)/2],
-                                    [0, 0, 0.5, 0.5]])
+                                    [0, 0, 0.5, 0.5]]).astype('float64')
 
     def process_point(self, world_point):
         rows, cols = world_point.shape
@@ -144,4 +144,4 @@ class ViewVolume:
 
         world_point = np.append(world_point, [[1]], axis=0)
         view_point = self.M_viewport @ (self.M_projection @ (self.M_rotation @ (self.M_translation @ world_point)))
-        return view_point
+        return view_point.astype('float64')

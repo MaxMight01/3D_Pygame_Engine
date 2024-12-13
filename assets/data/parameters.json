@@ -2,5 +2,6 @@
     "aspect_ratio":"16-9",
     "fps":60,
     "colors":{"background":"black"},
-    "caption":"3D Pygame Engine Test"
+    "caption":"3D Pygame Engine Test",
+    "step":0.6
 }

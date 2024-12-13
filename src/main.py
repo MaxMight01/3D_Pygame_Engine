@@ -3,6 +3,7 @@ import os
 import json
 import utils
 import numpy as np
+import game
 
 pygame.init()
 
@@ -28,10 +29,19 @@ c_BACKGROUND = params["colors"]["background"]
 fps = params["fps"]
 timer = pygame.time.Clock()
 
+#Intialise game.
+game_step = params["step"]
+game_movement = game.Movement()
+game_movement.int_camera()
+game_movement.int_view_volume(-1, 1, ratio_h/ratio_w, -ratio_h/ratio_w, 1, 100)
+game_movement.set_screen_res(screen_width, screen_height)
+
 running = True
 while running:
     timer.tick(fps)
     screen.fill(c_BACKGROUND)
+
+    game_movement.movement(pygame.key.get_pressed(), game_step)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
