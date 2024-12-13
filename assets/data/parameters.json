@@ -3,5 +3,5 @@
     "fps":60,
     "colors":{"background":"white"},
     "caption":"3D Pygame Engine Test",
-    "step":0.6
+    "step":0.04
 }

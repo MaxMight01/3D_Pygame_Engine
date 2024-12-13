@@ -24,10 +24,10 @@ class Movement:
     #Enter pygame.key.get_pressed() here. Goes outside the `event in pygame.event.get()`.
     def movement(self, keys, step):
         keys_pressed = keys[pygame.K_w] + keys[pygame.K_a] + keys[pygame.K_s] + keys[pygame.K_d]
-        W = keys[pygame.K_w]*np.array([[0],[0],[-step]])
-        A = keys[pygame.K_a]*np.array([[-step],[0],[0]])
-        S = keys[pygame.K_s]*np.array([[0],[0],[step]])
-        D = keys[pygame.K_d]*np.array([[step],[0],[0]])
+        W = keys[pygame.K_w] * self.camera.w_unit * step
+        A = keys[pygame.K_a] * self.camera.u_unit * -step
+        S = keys[pygame.K_s] * self.camera.w_unit * -step
+        D = keys[pygame.K_d] * self.camera.u_unit * step
 
         if keys_pressed == 1 or keys_pressed == 3:
             self.camera.update_position_movement(W+A+S+D)

@@ -4,6 +4,8 @@ import json
 import utils
 import numpy as np
 import game
+from world import World
+from objects import basic
 
 pygame.init()
 
@@ -29,12 +31,27 @@ c_BACKGROUND = params["colors"]["background"]
 fps = params["fps"]
 timer = pygame.time.Clock()
 
-#Intialise game.
+#Initialise game.
 game_step = params["step"]
 game_movement = game.Movement()
 game_movement.int_camera()
-game_movement.int_view_volume(-1, 1, ratio_h/ratio_w, -ratio_h/ratio_w, 1, 100)
+game_movement.int_view_volume(-1, 1, ratio_h/ratio_w, -ratio_h/ratio_w, 1, 100000)
 game_movement.set_screen_res(screen_width, screen_height)
+
+#Font.
+font = pygame.font.SysFont("Arial",24)
+
+#Initialise world.
+world = World(game_movement.camera, game_movement.view_volume)
+
+#Generate grid.
+world.generate_grid(step=1)
+
+#One triangle to world.
+triangle = basic.Triangle(vertex1=[-1, 0, -1], vertex2=[1, 0, -1], vertex3=[0, 1.732, -1])
+world.add_object(triangle)
+triangle = basic.Triangle(vertex1=[-1, 0, 1], vertex2=[1, 0, 1], vertex3=[0, 1.732, 1])
+world.add_object(triangle)
 
 running = True
 while running:
@@ -42,6 +59,14 @@ while running:
     screen.fill(c_BACKGROUND)
 
     game_movement.movement(pygame.key.get_pressed(), game_step)
+    world.update(timer.get_time() / 1000.0) #delta_time in seconds
+    world.render(screen)
+    world.update_camera(game_movement.camera, game_movement.view_volume)
+
+    camera_position = game_movement.camera.origin
+    camera_position_text = f"{camera_position[0][0]:.2f}, {camera_position[1][0]:.2f}, {camera_position[2][0]:.2f}"
+    text_surface = font.render(camera_position_text, True, 'black')
+    screen.blit(text_surface, (10, 10))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
