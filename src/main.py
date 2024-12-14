@@ -35,7 +35,8 @@ timer = pygame.time.Clock()
 game_step = params["step"]
 game_movement = game.Movement()
 game_movement.int_camera()
-game_movement.int_view_volume(-1, 1, ratio_h/ratio_w, -ratio_h/ratio_w, 1, 100000)
+#game_movement.int_view_volume(-2, 1, ratio_h/ratio_w, -ratio_h/ratio_w, 0.7, 100)
+game_movement.int_view_volume(-1, 1, -ratio_h/ratio_w, ratio_h/ratio_w, 0.7, 100)
 game_movement.set_screen_res(screen_width, screen_height)
 
 #Font.
@@ -45,12 +46,12 @@ font = pygame.font.SysFont("Arial",24)
 world = World(game_movement.camera, game_movement.view_volume)
 
 #Generate grid.
-world.generate_grid(step=1)
+world.generate_grid(step=0.1)
 
 #One triangle to world.
-triangle = basic.Triangle(vertex1=[-1, 0, -1], vertex2=[1, 0, -1], vertex3=[0, 1.732, -1])
+triangle = basic.Triangle(vertex1=[-0.1, 0, -1], vertex2=[0.1, 0, -1], vertex3=[0, 0.1732, -1])
 world.add_object(triangle)
-triangle = basic.Triangle(vertex1=[-1, 0, 1], vertex2=[1, 0, 1], vertex3=[0, 1.732, 1])
+triangle = basic.Triangle(vertex1=[-0.1, 0, 1], vertex2=[0.1, 0, 1], vertex3=[0, 0.1732, 1])
 world.add_object(triangle)
 
 running = True
